@@ -1,13 +1,17 @@
 package com.example.spacebook.login
 
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.spacebook.MainActivity
 import com.example.spacebook.api.SpacebookApi
 import com.example.spacebook.login.LoginViewModel.State.Error.Reason.*
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+
 
 class LoginViewModel(private val api: SpacebookApi) : ViewModel() {
 
@@ -59,5 +63,21 @@ class LoginViewModel(private val api: SpacebookApi) : ViewModel() {
 
     private fun isValidPassword(password: String): Boolean {
         return password.length >= 8
+    }
+
+    fun createAccount(email: String, password: String){
+        viewModelScope.launch {
+            try {
+                val res = api.createAccount(SpacebookApi.UserRequest("jason",email, password,"jzzur200"))
+            } catch (e: HttpException) {
+                if (e.response()?.code() == 401) {
+                      Log.d("LOGIN VIEW","ERROR")
+                } else {
+
+                }
+            }
+
+        }
+
     }
 }

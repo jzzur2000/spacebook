@@ -30,6 +30,12 @@ interface SpacebookApi {
     @JsonClass(generateAdapter = true)
     data class SessionRequest(val email: String, val password: String)
 
+    @JsonClass(generateAdapter = true)
+    data class UserRequest(val name: String, val email: String, val password: String, val githubUsername: String)
+
     @POST("session")
     suspend fun login(@Body request: SessionRequest): ApiResponse<User>
+
+    @POST("users")
+    suspend fun createAccount(@Body request: UserRequest)
 }
